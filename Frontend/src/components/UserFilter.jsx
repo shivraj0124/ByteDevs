@@ -7,12 +7,8 @@ function UserFilter() {
 
   const handleFetch = async () => {
     try {
-      // const response = await fetch(`https://api.example.com/data?event=${event}&location=${location}`);
-      // const result = await response.json();
-      const result = [
-        { event: "Comedy Night", location: "New York" }
-      
-      ];
+      // Simulated API response with event date
+      const result = [{ date: "2025-03-15", location: "New York" }];
       setData(result);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -24,17 +20,17 @@ function UserFilter() {
       <h1 className="text-3xl font-bold text-white">Search Events</h1>
       <div className="flex flex-row gap-6 w-full max-w-lg">
         <div className="flex flex-col flex-1">
-          <label className="text-sm font-medium">Enter Event</label>
+          <label className="text-sm font-medium my-2">Enter Event</label>
           <input
-            type="text"
-            placeholder="Enter event name"
+            type="date"
+            placeholder="Enter event date"
             value={event}
             onChange={(e) => setEvent(e.target.value)}
             className="border border-gray-500 rounded-lg p-2 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="flex flex-col flex-1">
-          <label className="text-sm font-medium">Enter Location</label>
+          <label className="text-sm font-medium my-2">Enter Location</label>
           <input
             type="text"
             placeholder="Enter location"
@@ -59,7 +55,7 @@ function UserFilter() {
                 key={index}
                 className="flex justify-between bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition duration-200"
               >
-                <span className="font-medium">{item.event}</span>
+                <span className="font-medium">{item.date}</span>
                 <span className="text-gray-400">{item.location}</span>
               </div>
             ))}

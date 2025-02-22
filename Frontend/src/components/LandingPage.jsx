@@ -1,6 +1,8 @@
 import React from "react";
 import Navbar from "./Navbar";
 import UserFilter from "./UserFilter";
+import EventCard from "./EventCard";
+import RandomEvents from "./RandomEvents";
 
 function LandingPage() {
   return (
@@ -18,7 +20,9 @@ function LandingPage() {
         <UserFilter />
       </div>
 
-   
+      <div className=" h-screen w-screen flex flex-col justify-center items-center">
+        <RandomEvents />
+      </div>
     </div>
   );
 }
