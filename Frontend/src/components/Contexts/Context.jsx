@@ -2,13 +2,14 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 const Context = createContext();
 
 export const ContextProvider = ({ children }) => {
-
-  const [siteMode,setSiteMode]=useState(localStorage.getItem("siteMode") || "dark")
+  const [siteMode, setSiteMode] = useState(
+    localStorage.getItem("siteMode") || "dark"
+  );
 
   const value = {
-    siteMode,setSiteMode
+    siteMode,
+    setSiteMode,
   };
- 
 
   useEffect(() => {
     localStorage.setItem("siteMode", siteMode);
