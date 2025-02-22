@@ -26,7 +26,7 @@ const EventCard = () => {
           <Typography gutterBottom variant="h6" component="div">
             Comedy with Shivraj
           </Typography>
-          <Typography variant="body2" color="white">
+          <Typography variant="body2" color="gray">
             Get ready for a night full of laughter with Shivraj Sharma! Join us
             for an unforgettable comedy experience as he brings his best jokes.
           </Typography>
