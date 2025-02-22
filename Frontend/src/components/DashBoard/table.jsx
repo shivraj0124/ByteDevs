@@ -28,32 +28,55 @@ const staticData = [
 
 const CampaignTable = () => {
   const [data, setData] = useState(staticData);
+  const [filter, setFilter] = useState("All");
 
   const filterData = (status) => {
-    if (status === "All") {
-      setData(staticData);
-    } else {
-      setData(staticData.filter((campaign) => campaign.status === status));
-    }
+    setFilter(status);
   };
+
+  const toggleStatus = (id) => {
+    setData((prevData) =>
+      prevData.map((campaign) =>
+        campaign.id === id
+          ? {
+              ...campaign,
+              status: campaign.status === "Accepted" ? "Rejected" : "Accepted",
+            }
+          : campaign
+      )
+    );
+  };
+
+  const filteredData =
+    filter === "All"
+      ? data
+      : data.filter((campaign) => campaign.status === filter);
 
   return (
     <div className="p-6 bg-black min-h-screen text-white">
       <div className="mb-6 flex space-x-4 mt-2">
         <button
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-full text-white font-semibold shadow-lg transition-all duration-300"
+          className={`px-6 py-3 rounded-full text-white font-semibold shadow-lg transition-all duration-300 ${
+            filter === "All" ? "bg-blue-700" : "bg-blue-600 hover:bg-blue-700"
+          }`}
           onClick={() => filterData("All")}
         >
           All
         </button>
         <button
-          className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-full text-white font-semibold shadow-lg transition-all duration-300"
+          className={`px-6 py-3 rounded-full text-white font-semibold shadow-lg transition-all duration-300 ${
+            filter === "Accepted"
+              ? "bg-green-700"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
           onClick={() => filterData("Accepted")}
         >
           Accepted
         </button>
         <button
-          className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-full text-white font-semibold shadow-lg transition-all duration-300"
+          className={`px-6 py-3 rounded-full text-white font-semibold shadow-lg transition-all duration-300 ${
+            filter === "Rejected" ? "bg-red-700" : "bg-red-600 hover:bg-red-700"
+          }`}
           onClick={() => filterData("Rejected")}
         >
           Rejected
@@ -72,7 +95,7 @@ const CampaignTable = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((campaign, index) => (
+            {filteredData.map((campaign, index) => (
               <tr
                 key={index}
                 className={`${
@@ -92,9 +115,27 @@ const CampaignTable = () => {
                   {campaign.status}
                 </td>
                 <td className="p-4">{campaign.channel}</td>
-                <td className="p-4 cursor-pointer text-center">&#x22EE;</td>
+                <td className="p-4 text-center">
+                  <button
+                    className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${
+                      campaign.status === "Rejected"
+                        ? "bg-green-600 hover:bg-green-700"
+                        : "bg-red-600 hover:bg-red-700"
+                    }`}
+                    onClick={() => toggleStatus(campaign.id)}
+                  >
+                    {campaign.status === "Rejected" ? "Accept" : "Reject"}
+                  </button>
+                </td>
               </tr>
             ))}
+            {filteredData.length === 0 && (
+              <tr>
+                <td colSpan="6" className="p-4 text-center text-gray-400">
+                  No campaigns found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -103,14 +144,3 @@ const CampaignTable = () => {
 };
 
 export default CampaignTable;
-
-// API Fetch Option (Uncomment if needed)
-// const fetchData = async (status) => {
-//   try {
-//     const response = await fetch(`/api/campaigns?status=${status}`);
-//     const result = await response.json();
-//     setData(result);
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// };
