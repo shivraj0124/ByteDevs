@@ -24,10 +24,19 @@ function login() {
         />
       </div>
       <div className=" w-[50%] h-full border flex flex-col items-center justify-center">
-        <Form>
-          <h1 className="text-3xl font-bold">Email:</h1>
-          <input className=" px-4 py-[6px] border border-zinc-200 w-full rounded-lg" />
-        </Form>
+        <div>
+          <div className="space-y-2 text-center md:text-left">
+            <h1 className="text-3xl font-bold tracking-tight">Hello,</h1>
+            <h2 className="text-3xl font-bold tracking-tight">Welcome Back</h2>
+          </div>
+          <form>
+            <h1 className=" text-left">Email:</h1>
+            <input className=" px-4 py-[6px] border border-zinc-200 w-full rounded-lg" />
+            <h1 className=" text-left">Password:</h1>
+            <input className=" px-4 py-[6px] border border-zinc-200 w-full rounded-lg" />
+            <input type="submit" />
+          </form>
+        </div>
       </div>
     </div>
   );
