@@ -1,11 +1,10 @@
-import Payment from "./components/Payment";
+import Login from "./auth/login";
 
 function App() {
   return (
     <>
-      <div className="font-bold text-center">Hello World
-
-        <Payment/>
+      <div className="font-bold text-center">
+        <Login />
       </div>
     </>
   );
