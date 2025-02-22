@@ -19,6 +19,10 @@ async function classifyComedyGenre(title, description) {
   - Sketch
   - Dark Comedy
   - Marathi Comedy
+  - Storytelling Comedy
+  - Mimicry & Impression
+  - Observational Comedy
+  - Roast Comedy
 
   Title: "${title}"
   Description: "${description}"

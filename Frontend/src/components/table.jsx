@@ -1,10 +1,28 @@
 import React, { useState } from "react";
 
 const staticData = [
-  { name: "Sale", id: 12, type: "Push", status: "Accepted", channel: "android" },
+  {
+    name: "Sale",
+    id: 12,
+    type: "Push",
+    status: "Accepted",
+    channel: "android",
+  },
   { name: "Sale2", id: 123, type: "Inapp", status: "Rejected", channel: "iOS" },
-  { name: "Sale34", id: 45, type: "Email", status: "Accepted", channel: "android" },
-  { name: "Discount", id: 67, type: "Push", status: "Rejected", channel: "android" },
+  {
+    name: "Sale34",
+    id: 45,
+    type: "Email",
+    status: "Accepted",
+    channel: "android",
+  },
+  {
+    name: "Discount",
+    id: 67,
+    type: "Push",
+    status: "Rejected",
+    channel: "android",
+  },
   { name: "Promo", id: 89, type: "Email", status: "Accepted", channel: "web" },
 ];
 
@@ -22,7 +40,7 @@ const CampaignTable = () => {
   return (
     <div className="p-6 bg-black min-h-screen text-white">
       <div className="mb-6 flex space-x-4 mt-2">
-      <button
+        <button
           className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-full text-white font-semibold shadow-lg transition-all duration-300"
           onClick={() => filterData("All")}
         >
@@ -40,7 +58,6 @@ const CampaignTable = () => {
         >
           Rejected
         </button>
-        
       </div>
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-700 shadow-lg rounded-lg overflow-hidden">
@@ -67,7 +84,9 @@ const CampaignTable = () => {
                 <td className="p-4">{campaign.type}</td>
                 <td
                   className={`p-4 font-semibold ${
-                    campaign.status === "Rejected" ? "text-red-400" : "text-green-400"
+                    campaign.status === "Rejected"
+                      ? "text-red-400"
+                      : "text-green-400"
                   }`}
                 >
                   {campaign.status}
