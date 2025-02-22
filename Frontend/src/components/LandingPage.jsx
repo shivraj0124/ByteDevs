@@ -14,11 +14,11 @@ function LandingPage() {
         </div>
       </div>
 
-      <div className=" w-full flex justify-between items-center">
+      <div className=" h-screen w-screen flex flex-col justify-center items-center">
         <UserFilter />
       </div>
 
-      <div></div>
+   
     </div>
   );
 }
