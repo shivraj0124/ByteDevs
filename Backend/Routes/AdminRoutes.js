@@ -2,24 +2,24 @@ const express = require("express");
 const router = express.Router();
 const Venue = require("../Models/VenueModel");
 router.get("/getVenues", async (req, res) => {
-    const { filter } = req.body;
-    try {
-      if (filter === "All") {
-        const venues = await Venue.find();
-        res.json(venues);
-      } else if (filter === "approved") {
-        const venues = await Venue.find({isApproved: true });
-        res.json(venues);
-      } else if (filter === "unapproved") {
-        const venues = await Venue.find({isApproved: false });
-        res.json(venues);
-      }
-    } catch (err) {
-      res
-        .status(500)
-        .json({ message: "Error fetching venues", error: err.message });
+  const { filter } = req.body;
+  try {
+    if (filter === "All") {
+      const venues = await Venue.find();
+      res.json(venues);
+    } else if (filter === "approved") {
+      const venues = await Venue.find({ isApproved: true });
+      res.json(venues);
+    } else if (filter === "unapproved") {
+      const venues = await Venue.find({ isApproved: false });
+      res.json(venues);
     }
-  });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error fetching venues", error: err.message });
+  }
+});
 
 router.put("/approveVenue/:id", async (req, res) => {
   try {
