@@ -1,11 +1,56 @@
 const express = require("express");
 const router = express.Router();
 const Event = require("../Models/EventModels");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const dotenv = require("dotenv");
+
+dotenv.config();
+const API_KEY = process.env.GOOGLE_API_KEY;
+const genAI = new GoogleGenerativeAI(API_KEY);
+
+async function classifyComedyGenre(title, description) {
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+  const prompt = `
+  Classify the comedy show into one of the following genres: 
+  - Stand-up
+  - Improv
+  - Satire
+  - Sketch
+  - Dark Comedy
+  - Marathi Comedy
+
+  Title: "${title}"
+  Description: "${description}"
+
+  Only return the genre name without explanation.
+  `;
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const genre = response.text().trim();
+
+    return genre;
+  } catch (error) {
+    console.error("Error generating content:", error);
+    return "Error in classification";
+  }
+}
 
 router.post("/create", async (req, res) => {
   try {
-    const { title, description, date, time, comedian, venue, ticketPrice, maxTickets, images } = req.body;
-
+    const {
+      title,
+      description,
+      date,
+      time,
+      comedian,
+      venue,
+      ticketPrice,
+      maxTickets,
+      images,
+    } = req.body;
+    const genre = await classifyComedyGenre(title, description);
     const newEvent = new Event({
       title,
       description,
@@ -17,20 +62,30 @@ router.post("/create", async (req, res) => {
       maxTickets,
       availableTickets: maxTickets,
       images,
+      genre,
     });
 
     await newEvent.save();
     res.status(201).json({ message: "Event created successfully", newEvent });
   } catch (err) {
-    res.status(500).json({ message: "Error creating event", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error creating event", error: err.message });
   }
 });
 
-
-
 router.put("/update/:id", async (req, res) => {
   try {
-    const { title, description, date, time, venue, ticketPrice, maxTickets, images } = req.body;
+    const {
+      title,
+      description,
+      date,
+      time,
+      venue,
+      ticketPrice,
+      maxTickets,
+      images,
+    } = req.body;
     const eventId = req.params.id;
 
     const event = await Event.findById(eventId);
@@ -51,7 +106,9 @@ router.put("/update/:id", async (req, res) => {
     await event.save();
     res.json({ message: "Event updated successfully", event });
   } catch (err) {
-    res.status(500).json({ message: "Error updating event", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error updating event", error: err.message });
   }
 });
 
@@ -67,7 +124,9 @@ router.delete("/delete/:id", async (req, res) => {
     await Event.findByIdAndDelete(eventId);
     res.json({ message: "Event deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Error deleting event", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error deleting event", error: err.message });
   }
 });
 
@@ -91,7 +150,5 @@ router.get("/myEvents/:id", async (req, res) => {
       .json({ message: "Error fetching venues", error: err.message });
   }
 });
-
-
 
 module.exports = router;

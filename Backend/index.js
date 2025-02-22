@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 mongoose.set("strictQuery", false);
 const db = process.env.DB_URL;
-console.log(db)
+console.log(db);
 mongoose
   .connect(db)
   .then(() => {
@@ -27,10 +27,9 @@ app.get("/", (req, res) => {
   });
 });
 
-
 app.use("/api/auth", require("./Routes/AuthRoutes"));
 app.use("/api/manager", require("./Routes/ManagerRoutes"));
 app.use("/api/artist", require("./Routes/ComedianRoutes"));
 app.use("/api/admin", require("./Routes/AdminRoutes"));
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(5001, () => console.log("Server running on port 5001"));
