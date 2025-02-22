@@ -14,6 +14,11 @@ import ComedianMain from "./components/ComedianDash/ComedianMain";
 import ComedianTable from "./components/ComedianDash/ComedianTable";
 import AddVenue from "./components/ComedianDash/AddVenue";
 
+import AdminDashboard from "./components/AdminDash/AdminDashboard";
+ import AdminTable from "./components/AdminDash/AdminTable";
+ import AdminVenue from "./components/AdminDash/AdminVenue";
+ import AdminMain from "./components/AdminDash/AdminMain";
+
 function App() {
   return (
     <>
@@ -31,6 +36,12 @@ function App() {
               <Route path={"AddEvent"} element={<AddVenue />} />
               
             </Route>
+
+            <Route path="/AdminDashBoard_Lay" element={<AdminDashboard />}>
+      <Route index element={<AdminMain/>} />
+      <Route path={"AdminTable"} element={<AdminTable />} />
+      <Route path={"AdminVenue"} element={<AdminVenue />} />
+    </Route>
 
             <Route path="/ComedianDashBoard_Lay" element={<ComedianDashBoard />}>
               <Route index element={<ComedianMain />} />

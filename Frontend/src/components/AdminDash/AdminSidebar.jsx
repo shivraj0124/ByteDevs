@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, CalendarDays, PlusCircle } from "lucide-react";
+import { Home, CalendarDays, PlusCircle, Users, FileText } from "lucide-react";
 
-const ComedianSidebar = () => {
+const AdminSidebar = () => {
   const navigate = useNavigate();
 
   const menuItems = [
@@ -14,13 +14,23 @@ const ComedianSidebar = () => {
     {
       path: "AdminTable",
       icon: <CalendarDays className="w-5 h-5" />,
-      label: "Events",
+      label: "Manage Events",
     },
     {
       path: "AdminVenue",
       icon: <PlusCircle className="w-5 h-5" />,
-      label: "Add Event",
+      label: "Add Venue",
     },
+    // {
+    //   path: "/admin-users",
+    //   icon: <Users className="w-5 h-5" />,
+    //   label: "Manage Users",
+    // },
+    // {
+    //   path: "/admin-reports",
+    //   icon: <FileText className="w-5 h-5" />,
+    //   label: "Reports",
+    // },
   ];
 
   return (
@@ -44,4 +54,4 @@ const ComedianSidebar = () => {
   );
 };
 
-export default ComedianSidebar;
+export default AdminSidebar;

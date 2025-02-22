@@ -14,7 +14,7 @@ import {
 const DashBoard = () => {
   const Navbar = () => {
     return (
-      <nav className="w-full px-6 py-4">
+      <nav className="w-full px-6 py-4 ">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Menu className="w-6 h-6 text-gray-200" />
