@@ -22,7 +22,7 @@ const AddEvent = () => {
 
   const fetchVenues = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/artist/getAllVenues");
+      const response = await axios.get("http://localhost:5001/api/artist/getAllVenues");
       setVenues(response.data);
     } catch (error) {
       console.error("Error fetching venues:", error);
@@ -67,7 +67,7 @@ const AddEvent = () => {
       setUploadedImageUrl(response1.data.secure_url);
       const url=response1.data.secure_url
    
-      const response = await axios.post("http://localhost:5000/api/artist/create", {
+      const response = await axios.post("http://localhost:5001/api/artist/create", {
         title,
         description,
         date,

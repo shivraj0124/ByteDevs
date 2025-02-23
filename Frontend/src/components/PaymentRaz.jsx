@@ -1,30 +1,29 @@
 import { useState } from "react";
 import axios from "axios";
-import Razorpay from "razorpay";
+
 function App() {
   const [amount, setAmount] = useState(0);
   const currency = "INR";
   const [receiptNo, setReceiptNo] = useState(0);
 
   function generateOrder() {
-    const receipt = `receipt#${receiptNo}`;
-    setReceiptNo((prev) => prev + 1); // Correctly updating receipt number
+    const newReceiptNo = receiptNo + 1; // Ensure correct receipt number
+    const receipt = `receipt#${newReceiptNo}`;
+    setReceiptNo(newReceiptNo); // Update receipt number correctly
 
-    console.log("Creating order with amount:", amount, "receipt:", receipt); // Debugging
+    console.log("Creating order with amount:", amount, "receipt:", receipt);
 
     axios
-      .post("http://localhost:5000/createOrder", { amount, currency, receipt })
+      .post("http://localhost:8000/createOrder", { amount, currency, receipt })
       .then((res) => {
-        // Debug API response
+        // if (!res.data || !res.data.amount || !res.data.id) {
+        //   alert("Error: Invalid order response from server");
+        //   return;
+        // }
 
-        if (!res.data || !res.data.amount || !res.data.id) {
-          alert("Error: Invalid order response from server");
-          return;
-        }
-
-        var options = {
-          key_id: "rzp_test_l0BaBYVfmDglWM",
-          amount: res.data.amount * 100, // Convert to paise (important fix)
+        const options = {
+          key: "rzp_test_l0BaBYVfmDglWM",
+          amount: res.data.amount  * 100, // Ensure backend sends amount in paise
           currency: "INR",
           name: "Ticket Payment",
           description: "Pay & Meet at the Venue.",
@@ -32,7 +31,7 @@ function App() {
           order_id: res.data.id,
           handler: function (response) {
             console.log("Payment Success:", response);
-            alert("This step of Payment Succeeded");
+            alert("Payment Successful!");
           },
           prefill: {
             contact: "7715033283",
@@ -42,13 +41,26 @@ function App() {
           theme: {
             color: "#2300a3",
           },
+          modal: {
+            ondismiss: function () {
+              alert("Payment popup closed!");
+            },
+          },
         };
 
-        var razorpayObject = new Razorpay(options);
-        razorpayObject.on("payment.failed", function (response) {
-          console.log("Payment Failed:", response);
-          alert("This step of Payment Failed");
-        });
+        const razorpayObject = new window.Razorpay(options);
+
+        // Handle Payment Failure Inside 'handler' (since 'on' may not work)
+        options.handler = function (response) {
+          if (response.error) {
+            console.error("Payment Failed:", response.error);
+            alert("Payment Failed! Please try again.");
+          } else {
+            console.log("Payment Success:", response);
+            alert("Payment Successful!");
+          }
+        };
+
         razorpayObject.open();
       })
       .catch((error) => {

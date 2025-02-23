@@ -21,7 +21,7 @@ const AdminDashboard = () => {
 
   const earningsData = [
     { month: "Jan", earnings: 12000 },
-    { month: "Feb", earnings: 15000 },
+    { month: "Feb", earnings: 15001 },
     { month: "Mar", earnings: 18000 },
     { month: "Apr", earnings: 20000 },
   ];

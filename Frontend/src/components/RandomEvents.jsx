@@ -6,7 +6,7 @@ function RandomEvents() {
   const [query, setQuery] = useState("");
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/user/Events");
+      const response = await axios.get("http://localhost:5001/api/user/Events");
       console.log(response);
       setCards(response?.data);
     } catch (err) {
@@ -17,7 +17,7 @@ function RandomEvents() {
   const fetchEvents2 = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/user/addSearch",
+        "http://localhost:5001/api/user/addSearch",
         {
           name: query,
         }

@@ -6,7 +6,7 @@ require("dotenv").config();
 const axios = require("axios");
 
 const app = express();
-app.use(cors({ origin: "*" }));
+app.use(cors());
 app.use(bodyParser.json());
 
 mongoose.set("strictQuery", false);
@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
   });
 });
 
-const Razorpay = require("razorpay")
+const Razorpay = require("razorpay");
 const razorpayInstance = new Razorpay({
   key_id: "rzp_test_l0BaBYVfmDglWM",
 
@@ -56,4 +56,4 @@ app.use("/api/admin", require("./Routes/AdminRoutes"));
 app.use("/api/maps", require("./Routes/Maproute"));
 app.use("/api/user", require("./Routes/UserRoutes"));
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(5001, () => console.log("Server running on port 5001"));

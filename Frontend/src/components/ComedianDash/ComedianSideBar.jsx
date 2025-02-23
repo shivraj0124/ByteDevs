@@ -12,12 +12,12 @@ const ComedianSidebar = () => {
       label: "Dashboard",
     },
     {
-      path: "AdminTable",
+      path: "ComedianTable",
       icon: <CalendarDays className="w-5 h-5" />,
       label: "Events",
     },
     {
-      path: "AdminVenue",
+      path: "AddVenue",
       icon: <PlusCircle className="w-5 h-5" />,
       label: "Add Event",
     },

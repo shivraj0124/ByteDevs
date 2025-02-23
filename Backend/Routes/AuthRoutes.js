@@ -7,7 +7,7 @@ const router = express.Router();
 // Signup Route
 router.post("/signup", async (req, res) => {
   const { name, email, password, role } = req.body;
-
+  console.log(name,email,password,role)
   try {
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
@@ -19,39 +19,34 @@ router.post("/signup", async (req, res) => {
       expiresIn: "30d",
     });
 
-    res
-      .status(201)
-      .json({
+    res.send({
         message: "User registered successfully",
         user: user,
         token: token,
       });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    res.send({ message: "Server error" });
   }
 });
 
 // Login Route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(email,password)
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!user) return res.send({ message: "Invalid credentials" });
 
     if (user.password !== password)
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.send({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
+    
 
-    res.json({
-      token,
+    res.send({
       user
     });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    res.send({ message: "Server error" ,err});
   }
 });
 

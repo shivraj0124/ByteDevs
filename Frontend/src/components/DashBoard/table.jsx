@@ -34,7 +34,7 @@ const CampaignTable = () => {
 
   const fetchEvents = async (id) => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/manager/getEvents/${id}`,{filter:filter});
+      const response = await axios.post(`http://localhost:5001/api/manager/getEvents/${id}`,{filter:filter});
       setEvents(response.data);
       console.log(response.data);
     } catch (error) {
@@ -46,7 +46,7 @@ const CampaignTable = () => {
   };
   
   const toggleStatus =async (id) => {
-    const response = await axios.put(`http://localhost:5000/api/manager/toggleApproval/${id}`,{filter:filter});
+    const response = await axios.put(`http://localhost:5001/api/manager/toggleApproval/${id}`,{filter:filter});
     fetchEvents(localStorage.getItem("userId"));
   };
 

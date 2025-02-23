@@ -12,7 +12,7 @@ const NearbyVenuesSearch = () => {
   const fetchVenues = async (latitude, longitude) => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/user/nearbyVenues",
+        "http://localhost:5001/api/user/nearbyVenues",
         {
           params: { latitude, longitude },
         }

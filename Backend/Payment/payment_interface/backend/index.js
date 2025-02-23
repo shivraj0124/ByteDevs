@@ -14,7 +14,7 @@ app.use(cors());
 
 
 //Inside app.js
-app.post("/createOrder", (req, res) => {
+app.post("/createOrder/", (req, res) => {
   // STEP 1:
   const { amount, currency, receipt } = req.body;
 
@@ -29,6 +29,6 @@ app.post("/createOrder", (req, res) => {
   );
 });
 
-app.listen(PORT, () => {
-  console.log("Server is Listening on Port ", PORT);
+app.listen(8000, () => {
+  console.log("Server is Listening on Port ", 8000);
 });

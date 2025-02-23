@@ -14,7 +14,7 @@ const ComedianTable = () => {
 
   const fetchVenues = async (id) => {
     try {
-      const response = await axios.post(`http://localhost:5000/api/artist/myEvents/${id}`,{filter:filter});
+      const response = await axios.post(`http://localhost:5001/api/artist/myEvents/${id}`,{filter:filter});
       setEvents(response.data);
       console.log(response.data);
     } catch (error) {

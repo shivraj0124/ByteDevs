@@ -24,7 +24,7 @@ import NearbyVenues from "./components/Location/NearByVenues";
 import LocationSearch from "./components/Location/LocationSearch";
 import { ContextProvider } from "./components/Contexts/Context";
 
-import PaymentRaz from "./components/PaymentRaz";
+import PaymentRaz from "./components/PaymentRaz.jsx";
 function App() {
   return (
     <>
@@ -40,7 +40,7 @@ function App() {
             <Route path="/DashBoard_Lay" element={<DashBoard />}>
               <Route index element={<Main />} />
               <Route path={"table"} element={<Table />} />
-              <Route path={"AddEvent"} element={<AddVenue />} />
+              <Route path={"AddEvent"} element={<CreateVenue />} />
               
             </Route>
 

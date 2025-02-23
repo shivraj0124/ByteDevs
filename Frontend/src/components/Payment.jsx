@@ -22,7 +22,7 @@ const Payment = () => {
       const amount = 100; // Amount in INR
 
       // Send request to backend
-      const response = await axios.post("http://localhost:5000/create-order", {
+      const response = await axios.post("http://localhost:5001/create-order", {
         orderId,
         amount,
         customer: {

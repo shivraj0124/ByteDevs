@@ -14,7 +14,7 @@ function App() {
     console.log("Creating order with amount:", amount, "receipt:", receipt); // Debugging
 
     axios
-      .post("http://localhost:5001/createOrder", { amount, currency, receipt })
+      .post("http://localhost:8000/createOrder", { amount, currency, receipt })
       .then((res) => {
         // Debug API response
 
@@ -60,7 +60,7 @@ function App() {
 
   return (
     <>
-      <input
+      <input  
         type="text"
         placeholder="Enter your amount in rupees..."
         style={{
