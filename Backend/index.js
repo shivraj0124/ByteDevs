@@ -27,6 +27,28 @@ app.get("/", (req, res) => {
   });
 });
 
+const Razorpay = require("razorpay")
+const razorpayInstance = new Razorpay({
+  key_id: "rzp_test_l0BaBYVfmDglWM",
+
+  key_secret: "7BUAam4GvrHRkrWui54BWscP",
+});
+
+app.post("/createOrder", (req, res) => {
+  // STEP 1:
+  const { amount, currency, receipt } = req.body;
+
+  // STEP 2:
+  razorpayInstance.orders.create(
+    { amount, currency, receipt },
+    (err, order) => {
+      //STEP 3 & 4:
+      if (!err) res.json(order);
+      else res.send(err);
+    }
+  );
+});
+
 app.use("/api/auth", require("./Routes/AuthRoutes"));
 app.use("/api/manager", require("./Routes/ManagerRoutes"));
 app.use("/api/artist", require("./Routes/ComedianRoutes"));

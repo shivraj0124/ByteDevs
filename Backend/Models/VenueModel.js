@@ -10,7 +10,7 @@ const venueSchema = new mongoose.Schema({
   city: { type: String },
   state: { type: String },
   capacity: { type: Number, required: true },
-  images: [{ type: String }], 
+  images: { type: String }, 
   manager: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   isApproved: { type: Boolean, default: false }, // Admin approval
 },{

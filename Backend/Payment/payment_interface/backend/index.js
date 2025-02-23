@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const PORT = process.env.PORT || 5001;
+
 
 //Inside app.js
 app.post("/createOrder", (req, res) => {

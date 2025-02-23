@@ -190,10 +190,11 @@ router.put("/toggleApproval/:id", async (req, res) => {
   }
 });
 
-router.get("/getEvents/:managerId", async (req, res) => {
+router.post("/getEvents/:managerId", async (req, res) => {
   try {
     const managerId = req.params.managerId;
     const {filter}=req.body
+    console.log(filter);
     // Step 1: Find all venues managed by the given managerId
     const venues = await Venue.find({ manager: managerId }).select("_id");
 
@@ -209,24 +210,25 @@ router.get("/getEvents/:managerId", async (req, res) => {
     // Step 3: Find events associated with the retrieved venue
     //  IDs
     if (filter === "All") {
-      const events = await Event.find({ venue: { $in: venueIds } });
+      const events = await Event.find({ venue: { $in: venueIds } }).populate("comedian").populate("venue")
 
       res.status(200).json(events);
-    } else if (filter === "approved") {
+    } else if (filter === "Accepted") {
       const events = await Event.find({
         venue: { $in: venueIds },
         isApproved: true,
-      });
+      }).populate("comedian").populate("venue")
 
       res.status(200).json(events);
-    }else if (filter === "unapproved") {
+    }else if (filter === "Not Accepted") {
         const events = await Event.find({
           venue: { $in: venueIds },
           isApproved: false,
-        });
+        }).populate("comedian").populate("venue")
   
         res.status(200).json(events);
       }
+
   } catch (error) {
     res
       .status(500)

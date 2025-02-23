@@ -26,7 +26,7 @@ const EventCard = ({ data }) => {
       >
         <img
           className="w-full h-[180px] object-cover"
-          src={data?.images[0]}
+          src={data?.images}
           alt="#"
         />
         <div className="p-4">
@@ -88,17 +88,17 @@ const EventCard = ({ data }) => {
             </div>
 
             {
-              <div className="mt-5 flex flex-left">
-                <button
-                  className="cursor-pointer p-2 border inset-0 bg-gradient-to-tr dark:from-[#121e26] dark:via-[#12100E] dark:to-[#113853] from-[#c6deef] via-[#e8e8ec] to-[#a9d0eb] rounded-md px-4 "
-                  disabled={data?.availableTickets <= 0}
-                  onClick={handleClick}
-                >
-                  {data?.availableTickets <= 0
-                    ? "No Tickets Available"
-                    : "Book"}
-                </button>
-              </div>
+              // <div className="mt-5 flex flex-left">
+              //   <button
+              //     className="cursor-pointer p-2 border inset-0 bg-gradient-to-tr dark:from-[#121e26] dark:via-[#12100E] dark:to-[#113853] from-[#c6deef] via-[#e8e8ec] to-[#a9d0eb] rounded-md px-4 "
+              //     disabled={data?.availableTickets <= 0}
+              //     onClick={handleClick}
+              //   >
+              //     {data?.availableTickets <= 0
+              //       ? "No Tickets Available"
+              //       : "Book"}
+              //   </button>
+              // </div>
             }
             
           </div>

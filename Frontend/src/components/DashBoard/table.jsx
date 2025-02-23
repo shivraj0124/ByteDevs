@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useEffect,useState } from "react";
+import axios from 'axios'
 const staticData = [
   {
     name: "Sale",
@@ -29,27 +29,38 @@ const staticData = [
 const CampaignTable = () => {
   const [data, setData] = useState(staticData);
   const [filter, setFilter] = useState("All");
+  const [events, setEvents] = useState();
 
+
+  const fetchEvents = async (id) => {
+    try {
+      const response = await axios.post(`http://localhost:5000/api/manager/getEvents/${id}`,{filter:filter});
+      setEvents(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching venues:", error);
+    }
+  };
   const filterData = (status) => {
     setFilter(status);
   };
   
-  const toggleStatus = (id) => {
-    setData((prevData) =>
-      prevData.map((campaign) =>
-        campaign.id === id
-          ? {
-              ...campaign,
-              status: campaign.status === "Accepted" ? "Rejected" : "Accepted",
-            }
-          : campaign
-      )
-    );
+  const toggleStatus =async (id) => {
+    const response = await axios.put(`http://localhost:5000/api/manager/toggleApproval/${id}`,{filter:filter});
+    fetchEvents(localStorage.getItem("userId"));
   };
 
-  const filteredData =
-    filter === "All" ? data : data.filter((campaign) => campaign.status === filter);
+  useEffect(() => {
+      fetchEvents(localStorage.getItem("userId"));
+    },[filter])
+    function formatDate(inputDate) {
+      const date = new Date(inputDate);
+      const year = date.getFullYear();
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
   
+      return `${year}-${day}-${month}`;
+    } // Ou
   // const fetchDetails =async()
   return (
     <div className="p-6  min-h-screen text-white">
@@ -76,17 +87,17 @@ const CampaignTable = () => {
           className={`px-6 py-3 rounded-full text-white font-semibold shadow-lg transition-all duration-300 ${
             filter === "Rejected" ? "bg-red-700" : "bg-red-600 hover:bg-red-700"
           }`}
-          onClick={() => filterData("Rejected")}
+          onClick={() => filterData("Not Accepted")}
         >
-          Rejected
+          Not Accepted
         </button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-700 shadow-lg rounded-lg overflow-hidden">
           <thead>
             <tr className="bg-gray-900 text-white text-md">
-              <th className="p-4 text-left">Id</th>
-              <th className="p-4 text-left">Tile</th>
+              <th className="p-4 text-left">Sr. No.</th>
+              <th className="p-4 text-left">Title</th>
               <th className="p-4 text-left">Images</th>
               <th className="p-4 text-left">Description</th>
               <th className="p-4 text-left">Comedian</th>
@@ -96,44 +107,39 @@ const CampaignTable = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((campaign, index) => (
+            {events?.map((campaign, index) => (
               <tr
                 key={index}
                 className={`${
                   index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
                 } hover:bg-gray-600 transition duration-200 text-left`}
               >
-                <td className="p-4 font-medium">{campaign.name}</td>
-                <td className="p-4">{campaign.id}</td>
-                <td className="p-4">{campaign.type}</td>
-                <td
-                  className={`p-4 font-semibold ${
-                    campaign.status === "Rejected"
-                      ? "text-red-400"
-                      : "text-green-400"
-                  }`}
-                >
-                  {campaign.status}
-                </td>
-                <td className="p-4">{campaign.channel}</td>
+                <td className="p-4 font-medium">{index+1}</td>
+                <td className="p-4 font-medium">{campaign.title}</td>
+                <td className="p-4 font-medium"><img className="h-[40px] w-[40px]" src={campaign.images}/></td>
+                <td className="p-4">{campaign?.description}</td>
+               
+                <td className="p-4">{campaign?.comedian?.name}</td>
+                <td className="p-4">{campaign?.venue?.name}</td>
+                <td className="p-4">{campaign?.availableTickets}</td>
                 <td className="p-4 text-center">
                   <button
-                    className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${
-                      campaign.status === "Rejected"
+                    className={`cursor-pointer px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${
+                      campaign.isApproved === false
                         ? "bg-green-600 hover:bg-green-700"
                         : "bg-red-600 hover:bg-red-700"
                     }`}
-                    onClick={() => toggleStatus(campaign.id)}
+                    onClick={() => toggleStatus(campaign._id)}
                   >
-                    {campaign.status === "Rejected" ? "Accept" : "Reject"}
+                    {campaign.isApproved === false ? "Accept" : "Reject"}
                   </button>
                 </td>
               </tr>
             ))}
-            {filteredData.length === 0 && (
+            {events?.length === 0 && (
               <tr>
                 <td colSpan="6" className="p-4 text-center text-gray-400">
-                  No campaigns found
+                  No Events found
                 </td>
               </tr>
             )}

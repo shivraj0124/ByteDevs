@@ -23,6 +23,8 @@ import CreateVenue from "./components/Location/CreateVenue";
 import NearbyVenues from "./components/Location/NearByVenues";
 import LocationSearch from "./components/Location/LocationSearch";
 import { ContextProvider } from "./components/Contexts/Context";
+
+import PaymentRaz from "./components/PaymentRaz";
 function App() {
   return (
     <>
@@ -61,9 +63,11 @@ function App() {
             </Route>
             <Route path="/nearByVenues" element={<NearbyVenues />}></Route>
             <Route path="/createVenue" element={<CreateVenue />}></Route> 
+            <Route path="/payment" element={<PaymentRaz />}></Route> 
           </Routes>
         </BrowserRouter>
         
+
           {/* <BrowserRouter>
             <Routes>
               <Route path="/login" element={<Login />}></Route>
