@@ -31,5 +31,7 @@ app.use("/api/auth", require("./Routes/AuthRoutes"));
 app.use("/api/manager", require("./Routes/ManagerRoutes"));
 app.use("/api/artist", require("./Routes/ComedianRoutes"));
 app.use("/api/admin", require("./Routes/AdminRoutes"));
+app.use("/api/maps", require("./Routes/Maproute"));
+app.use("/api/user", require("./Routes/UserRoutes"));
 
-app.listen(5001, () => console.log("Server running on port 5001"));
+app.listen(5000, () => console.log("Server running on port 5000"));

@@ -33,7 +33,7 @@ const CampaignTable = () => {
   const filterData = (status) => {
     setFilter(status);
   };
-
+  
   const toggleStatus = (id) => {
     setData((prevData) =>
       prevData.map((campaign) =>
@@ -48,12 +48,11 @@ const CampaignTable = () => {
   };
 
   const filteredData =
-    filter === "All"
-      ? data
-      : data.filter((campaign) => campaign.status === filter);
-
+    filter === "All" ? data : data.filter((campaign) => campaign.status === filter);
+  
+  // const fetchDetails =async()
   return (
-    <div className="p-6 bg-black min-h-screen text-white">
+    <div className="p-6  min-h-screen text-white">
       <div className="mb-6 flex space-x-4 mt-2">
         <button
           className={`px-6 py-3 rounded-full text-white font-semibold shadow-lg transition-all duration-300 ${
@@ -86,11 +85,13 @@ const CampaignTable = () => {
         <table className="w-full border border-gray-700 shadow-lg rounded-lg overflow-hidden">
           <thead>
             <tr className="bg-gray-900 text-white text-md">
-              <th className="p-4 text-left">Campaign Name</th>
-              <th className="p-4 text-left">Campaign Id</th>
-              <th className="p-4 text-left">Type</th>
-              <th className="p-4 text-left">Status</th>
-              <th className="p-4 text-left">Channel</th>
+              <th className="p-4 text-left">Id</th>
+              <th className="p-4 text-left">Tile</th>
+              <th className="p-4 text-left">Images</th>
+              <th className="p-4 text-left">Description</th>
+              <th className="p-4 text-left">Comedian</th>
+              <th className="p-4 text-left">Venue</th>
+              <th className="p-4 text-left">AvailableTickets</th>
               <th className="p-4 text-left">Actions</th>
             </tr>
           </thead>
@@ -100,7 +101,7 @@ const CampaignTable = () => {
                 key={index}
                 className={`${
                   index % 2 === 0 ? "bg-gray-800" : "bg-gray-700"
-                } hover:bg-gray-600 transition duration-200`}
+                } hover:bg-gray-600 transition duration-200 text-left`}
               >
                 <td className="p-4 font-medium">{campaign.name}</td>
                 <td className="p-4">{campaign.id}</td>

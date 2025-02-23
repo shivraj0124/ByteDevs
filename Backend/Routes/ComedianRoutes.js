@@ -3,7 +3,7 @@ const router = express.Router();
 const Event = require("../Models/EventModels");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const dotenv = require("dotenv");
-
+const Venue = require("../Models/VenueModel");
 dotenv.config();
 const API_KEY = process.env.GOOGLE_API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY);
@@ -54,12 +54,22 @@ router.post("/create", async (req, res) => {
       maxTickets,
       images,
     } = req.body;
+    console.log(title,
+      description,
+      date,
+      time,
+      comedian,
+      venue,
+      ticketPrice,
+      maxTickets,
+      images)
     const genre = await classifyComedyGenre(title, description);
+    console.log(genre);
     const newEvent = new Event({
       title,
       description,
       date,
-      time,
+      time:"",
       comedian,
       venue,
       ticketPrice,
@@ -68,8 +78,10 @@ router.post("/create", async (req, res) => {
       images,
       genre,
     });
+    console.log(newEvent);
 
     await newEvent.save();
+    console.log(newEvent);
     res.status(201).json({ message: "Event created successfully", newEvent });
   } catch (err) {
     res
@@ -134,20 +146,34 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
-router.get("/myEvents/:id", async (req, res) => {
+router.post("/myEvents/:id", async (req, res) => {
   const id = req.params.id;
   const { filter } = req.body;
+  console.log(filter)
   try {
     if (filter === "All") {
-      const venues = await Event.find({ comedian: id });
+      const venues = await Event.find({ comedian: id }).populate("venue");
       res.json(venues);
-    } else if (filter === "approved") {
-      const venues = await Event.find({ comedian: id, isApproved: true });
+    } else if (filter === "Accepted") {
+      const venues = await Event.find({ comedian: id, isApproved: true }).populate("venue");
       res.json(venues);
-    } else if (filter === "unapproved") {
-      const venues = await Event.find({ comedian: id, isApproved: false });
+    } else if (filter === "Not Accepted") {
+      const venues = await Event.find({ comedian: id, isApproved: false }).populate("venue");
       res.send(venues);
     }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error fetching venues", error: err.message });
+  }
+});
+
+router.get("/getAllVenues", async (req, res) => {
+  try {
+    
+      const venues = await Venue.find({isApproved: true });
+      res.send(venues);
+   
   } catch (err) {
     res
       .status(500)

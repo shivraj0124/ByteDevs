@@ -6,19 +6,27 @@ const Event = require("../Models/EventModels");
 
 router.post("/create", async (req, res) => {
   try {
-    const { name, location, capacity, images, managerId } = req.body;
-    // const managerId =
+    const { name,  capacity, images, managerId,address,displayName,city,state ,latitude, longitude } = req.body;
 
     const newVenue = new Venue({
       name,
-      location,
+      location: {
+        type: "Point",
+        coordinates: [longitude, latitude],
+      },
       capacity,
       images,
+      state,
+      city,
+      displayName,
       manager: managerId,
     });
+    console.log(newVenue)
 
     await newVenue.save();
-    res.status(201).json({ message: "Venue created successfully", newVenue });
+    console.log(newVenue)
+    res.send({ message: "Venue created successfully", newVenue });
+    console.log(newVenue)
   } catch (err) {
     res
       .status(500)
@@ -163,6 +171,25 @@ router.put("/approveEvent/:id", async (req, res) => {
   }
 });
 
+router.put("/toggleApproval/:id", async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    console.log(eventId)
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    event.isApproved = !event.isApproved;
+    await event.save();
+
+    res.status(200).json({ message: "Event approval status updated", event });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating venue", error: error.message });
+  }
+});
+
 router.get("/getEvents/:managerId", async (req, res) => {
   try {
     const managerId = req.params.managerId;
@@ -206,4 +233,7 @@ router.get("/getEvents/:managerId", async (req, res) => {
       .json({ message: "Error fetching events", error: error.message });
   }
 });
+
+
+
 module.exports = router;

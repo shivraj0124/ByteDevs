@@ -5,7 +5,6 @@ const EventForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
-    location: "",
     type: "Push",
     channel: "android",
   });
@@ -22,7 +21,7 @@ const EventForm = () => {
   };
 
   return (
-    <div className="p-10 bg-black min-h-screen text-white flex flex-col  items-center">
+    <div className="p-10 min-h-screen text-white flex flex-col  items-center">
       <h2 className="text-2xl font-bold mb-6">Add New Venue</h2>
       <form onSubmit={handleSubmit} className="bg-gray-900 p-6 rounded-lg shadow-lg w-96">
         <div className="mb-4">
@@ -31,6 +30,17 @@ const EventForm = () => {
             type="text"
             name="name"
             value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:ring focus:ring-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-400 mb-2 text-left">Location</label>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
             onChange={handleChange}
             required
             className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:ring focus:ring-blue-500"

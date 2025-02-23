@@ -1,96 +1,128 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // For navigation
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-const EventForm = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    location: "",
-    type: "Push",
-    channel: "android",
-  });
+const AddEvent = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [comedian, setComedian] = useState(localStorage.getItem("userId"));
+  const [venue, setVenue] = useState("");
+  const [ticketPrice, setTicketPrice] = useState([{ typeOfSeat: "", price: "" }]);
+  const [maxTickets, setMaxTickets] = useState("");
+  const [availableTickets, setAvailableTickets] = useState("");
+  const [image, setImage] = useState(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [venues, setVenues] = useState([]);
+  const [message, setMessage] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    fetchVenues();
+  }, []);
+
+  const fetchVenues = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/artist/getAllVenues");
+      setVenues(response.data);
+    } catch (error) {
+      console.error("Error fetching venues:", error);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleTicketChange = (index, field, value) => {
+    const updatedTickets = [...ticketPrice];
+    updatedTickets[index][field] = value;
+    setTicketPrice(updatedTickets);
+  };
+
+  const addTicketPrice = () => {
+    setTicketPrice([...ticketPrice, { typeOfSeat: "", price: "" }]);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+  };
+
+  // const handleImageUpload = async () => {
+    
+  //   } catch (error) {
+  //     console.error("Error uploading image:", error);
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Event Created:", formData);
-    alert("Event Created Successfully!");
-    navigate("/"); // Navigate back to Campaign Table
+    if (!image) return;
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "kjhack");
+
+    try {
+      const response1= await axios.post(
+        "https://api.cloudinary.com/v1_1/dnxwlb64j/image/upload",
+        formData
+      );
+      console.log(response1.data.secure_url)
+      setUploadedImageUrl(response1.data.secure_url);
+      const url=response1.data.secure_url
+   
+      const response = await axios.post("http://localhost:5000/api/artist/create", {
+        title,
+        description,
+        date,
+        time,
+        comedian,
+        venue,
+        ticketPrice,
+        maxTickets,
+        availableTickets,
+        images: url,
+      });
+      setMessage("Event created successfully!");
+    } catch (error) {
+      console.error("Error creating event:", error);
+      setMessage("Error creating event.");
+    }
   };
 
   return (
-    <div className="p-10 bg-black min-h-screen text-white flex flex-col  items-center">
-      <h2 className="text-2xl font-bold mb-6">Create New Event</h2>
-      <form onSubmit={handleSubmit} className="bg-gray-900 p-6 rounded-lg shadow-lg w-96">
-        <div className="mb-4">
-          <label className="block text-gray-400 mb-2 text-left">Event Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:ring focus:ring-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-400 mb-2 text-left">Location</label>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg focus:ring focus:ring-blue-500"
-          />
-        </div>
-        {/* <div className="mb-4">
-          <label className="block text-gray-400 mb-2 text-left">Type</label>
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg"
-          >
-            <option value="Push">Push</option>
-            <option value="Inapp">In-App</option>
-            <option value="Email">Email</option>
-          </select>
-        </div> */}
-        <div className="mb-4">
-          <label className="block text-gray-400 mb-2 text-left">Channel</label>
-          <select
-            name="channel"
-            value={formData.channel}
-            onChange={handleChange}
-            className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg"
-          >
-            <option value="android">Android</option>
-            <option value="iOS">iOS</option>
-            <option value="web">Web</option>
-          </select>
-        </div>
-        <div className="flex justify-between">
-          <button
-            type="button"
-            onClick={() => navigate("/")}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition"
-          >
-            Back
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition shadow-lg"
-          >
-            Create Event
-          </button>
-        </div>
+    <div className="max-w-2xl mx-auto p-6 bg-gray-900 text-white rounded-lg shadow-lg">
+      <h2 className="text-xl font-bold mb-4">Create Event</h2>
+      {message && <p className="mb-2 text-green-400">{message}</p>}
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event Title" required className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white" />
+
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Event Description" required className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white"></textarea>
+
+        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white" />
+
+        <select value={venue} onChange={(e) => setVenue(e.target.value)} required className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white">
+          <option value="">Select Venue</option>
+          {venues.map((venue) => (
+            <option key={venue._id} value={venue._id}>{venue.name}</option>
+          ))}
+        </select>
+
+        {ticketPrice.map((ticket, index) => (
+          <div key={index} className="flex gap-2">
+            <input type="text" placeholder="Seat Type" value={ticket.typeOfSeat} onChange={(e) => handleTicketChange(index, "typeOfSeat", e.target.value)} className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white" />
+            <input type="number" placeholder="Price" value={ticket.price} onChange={(e) => handleTicketChange(index, "price", e.target.value)} className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white" />
+          </div>
+        ))}
+        <button type="button" onClick={addTicketPrice} className="bg-blue-600 p-2 rounded-lg">+ Add Ticket Type</button>
+
+        <input type="number" value={maxTickets} onChange={(e) => setMaxTickets(e.target.value)} placeholder="Max Tickets" required className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white" />
+
+        <input type="number" value={availableTickets} onChange={(e) => setAvailableTickets(e.target.value)} placeholder="Available Tickets" required className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white" />
+
+        <input type="file" onChange={handleImageChange} className="border border-gray-600 rounded-lg p-2 bg-gray-800 text-white" />
+
+        <button type="submit" className="bg-green-600 p-2 rounded-lg hover:bg-green-700">Create Event</button>
       </form>
     </div>
   );
 };
 
-export default EventForm;
+export default AddEvent;

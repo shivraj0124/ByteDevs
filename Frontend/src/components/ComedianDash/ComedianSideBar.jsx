@@ -7,7 +7,7 @@ const ComedianSidebar = () => {
 
   const menuItems = [
     {
-      path: "/AdminDashBoard_Lay",
+      path: "/ComedianDashBoard_Lay",
       icon: <Home className="w-5 h-5" />,
       label: "Dashboard",
     },

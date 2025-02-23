@@ -19,10 +19,15 @@ import AdminDashboard from "./components/AdminDash/AdminDashboard";
  import AdminVenue from "./components/AdminDash/AdminVenue";
  import AdminMain from "./components/AdminDash/AdminMain";
 
+import CreateVenue from "./components/Location/CreateVenue";
+import NearbyVenues from "./components/Location/NearByVenues";
+import LocationSearch from "./components/Location/LocationSearch";
+import { ContextProvider } from "./components/Contexts/Context";
 function App() {
   return (
     <>
       <div className="font-bold text-center">
+      <ContextProvider>
         <BrowserRouter>
           <Routes>
             {/* <Route path="/" element={<LandingPage />}></Route> */}
@@ -54,8 +59,26 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<LandingPage />} />
             </Route>
+            <Route path="/nearByVenues" element={<NearbyVenues />}></Route>
+            <Route path="/createVenue" element={<CreateVenue />}></Route> 
           </Routes>
         </BrowserRouter>
+        
+          {/* <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Login />}></Route>
+              {/* <Route path="/login" element={<Login />}></Route> 
+
+              <Route path="/Signup" element={<Signup />}></Route>
+              {/* <Route path="/" element={<CreateVenue />}></Route> 
+              <Route path="/nearByVenues" element={<NearbyVenues />}></Route>
+              <Route
+                path="/searchLocation"
+                element={<LocationSearch />}
+              ></Route>
+            </Routes>
+          </BrowserRouter> */}
+        </ContextProvider>
       </div>
     </>
   );

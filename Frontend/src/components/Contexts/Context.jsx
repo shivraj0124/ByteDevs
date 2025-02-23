@@ -5,10 +5,14 @@ export const ContextProvider = ({ children }) => {
   const [siteMode, setSiteMode] = useState(
     localStorage.getItem("siteMode") || "dark"
   );
+  const [locationDetails, setLocationDetails] = useState();
+  const [eventDetails, setEventDetails] = useState();
 
   const value = {
     siteMode,
     setSiteMode,
+    locationDetails,
+    setLocationDetails,eventDetails,setEventDetails
   };
 
   useEffect(() => {
