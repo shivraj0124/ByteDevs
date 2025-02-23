@@ -1,4 +1,53 @@
 import React, { useState } from "react";
+import axios from "axios";
+function generateOrder(amount) {
+  const receipt = `receiptRandomiser`;
+  const currency = "INR";
+  amount = Number(amount) * 100
+  axios
+    .post("http://localhost:8000/createOrder", { amount, currency})
+    .then((res) => {
+      // Debug API response
+
+      if (!res.data || !res.data.amount || !res.data.id) {
+        alert("Error: Invalid order response from server");
+        return;
+      }
+
+      var options = {
+        key: "rzp_test_l0BaBYVfmDglWM",
+        amount: res.data.amount * 100, // Convert to paise (important fix)
+        currency: "INR",
+        name: "Ticket Payment",
+        description: "Pay & Meet at the Venue.",
+        image: "https://shorturl.at/cXFic",
+        order_id: res.data.id,
+        handler: function (response) {
+          console.log("Payment Success:", response);
+          alert("This step of Payment Succeeded");
+        },
+        prefill: {
+          contact: "7715033283",
+          name: "Yash Mulik",
+          email: "yashmulik@gmail.com",
+        },
+        theme: {
+          color: "#2300a3",
+        },
+      };
+
+      var razorpayObject = new Razorpay(options);
+      razorpayObject.on("payment.failed", function (response) {
+        console.log("Payment Failed:", response);
+        alert("This step of Payment Failed");
+      });
+      razorpayObject.open();
+    })
+    .catch((error) => {
+      console.error("Error creating order:", error);
+      alert("Failed to create order. Check console for details.");
+    });
+}
 
 const EventCard = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -16,7 +65,6 @@ const EventCard = ({ data }) => {
     alert("Hello");
   };
   return (
-   
     <div className="max-w-[345px] rounded-lg shadow-md overflow-hidden bg-gray-950 text-white">
       <div
         className="cursor-pointer "
@@ -74,17 +122,18 @@ const EventCard = ({ data }) => {
             </span>
 
             <div className="flex gap-2 mt-2">
-              {
-                data?.ticketPrice?.map((ticketPrice,index)=>{
-                  return (
-                    <div className="flex flex-left border rounded-md p-1 px-4">
-                      ₹{
-                        ticketPrice?.price
-                      }
-                    </div>
-                  )
-                })
-              }
+              {data?.ticketPrice?.map((ticketPrice, index) => {
+                return (
+                  <div key={index}
+                    className="flex flex-left border rounded-md p-1 px-4"
+                    onClick={(e) => {
+                      generateOrder(e.target.innerText.slice(1));
+                    }}
+                  >
+                    ₹{ticketPrice?.price}
+                  </div>
+                );
+              })}
             </div>
 
             {
@@ -100,9 +149,7 @@ const EventCard = ({ data }) => {
               //   </button>
               // </div>
             }
-            
           </div>
-         
         </div>
       )}
     </div>
